@@ -3,23 +3,43 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Biologia I As Células.</title>
-  <link rel="stylesheet" href="style3.css">
-  <link rel="icon" type="img" href="img/icon.png" />
+  <meta name="viewport" content="width=device-width">
+  <title>index</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
 
-</head>
 
 <body>
-  <div class="container">
-    <img src="img/gr.jpg" alt="imagemgr"   width="1000">
-  </div>
-  <br>
-  <div class="size">
-    <img src="img/ygonamoura.jpg" alt="imagemygona" width="400" > 
-  </div>
-  <div class="tamanho"> 
-    <img src="img/aghata.jpg" alt="imagemaghata" width="400">
-  </div>
+  <h1>Consulta de CNPJ</h1>
+  <form id="consultaForm" action="#">
+    <label for="cnpj">CNPJ:</label>
+    <input type="text" id="cnpj" name="cnpj" required pattern="[0-9]{14}" placeholder="Apenas números">
+    <button type="submit" onclick="buscarCNPJ()">Consultar</button>
+  </form>
+  <div id="resultado"></div>
 </body>
+
+<script>
+  function buscarCNPJ() {
+    var cnpj = document.getElementById("cnpj").value;
+    fetch("https://cors-anywhere.herokuapp.com/https://receitaws.com.br/v1/cnpj/" + cnpj).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+    }).then((dados) => {
+      console.log(dados)
+      document.getElementById("resultado").innerHTML = `
+      <span>Empresa: ${dados.nome}</span><br>
+      <span>Rua: ${dados.logradouro}</span><br>
+      <span>Número: ${dados.numero}</span><br>
+      <span>Bairro: ${dados.bairro}</span><br>
+      <span>Cidade: ${dados.municipio}</span><br>
+      <span>Estado: ${dados.uf}</span><br>
+      <span>IBGE: ${dados.ibge}</span><br>
+      <span>Atividade principal: ${dados.atividade}</span><br>
+      <span>Data de abertura: ${dados.iniciacao}</span><br>
+      `;
+    })
+  }
+</script>
+
 </html>
